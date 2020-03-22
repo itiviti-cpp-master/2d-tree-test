@@ -29,7 +29,7 @@ public:
 };
 
 
-using TestTypes = ::testing::Types<rbtree::PointsSet, kdtree::PointsSet>;
+using TestTypes = ::testing::Types<rbtree::PointSet, kdtree::PointSet>;
 TYPED_TEST_SUITE(PointSetTest, TestTypes);
 
 
