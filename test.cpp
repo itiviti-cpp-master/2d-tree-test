@@ -19,7 +19,7 @@ public:
 				m_set.put(Point(x, y));
 			}
 
-			std::cout << "Loaded " << m_set.size() << " points.\n";
+			// std::cout << "Loaded " << m_set.size() << " points.\n";
 		} catch(...) {
 			std::cout << "Can't read " << filename << ".\n";
 		}
@@ -52,7 +52,7 @@ TEST(PointSetTest, Rect)
 	ASSERT_FALSE(r.contains(Point(.9, 1.5)));
 	ASSERT_TRUE(r.intersects(Rect(Point(0., 0.), Point(1.5, 1.5))));
 	ASSERT_TRUE(r.intersects(Rect(Point(0.5, 0.5), Point(3.5, 3.5))));
-	ASSERT_FALSE(r.intersects(Rect(Point(1.1, 0.1), Point(3.5, 1.9))));
+	ASSERT_FALSE(r.intersects(Rect(Point(2.1, 0.1), Point(3.5, 1.9))));
 }
 
 TYPED_TEST(PointSetTest, PointSetMethods)
