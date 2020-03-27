@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include "utils.h"
 #include "primitives.h"
 
 #include <iostream>
