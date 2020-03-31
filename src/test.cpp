@@ -11,9 +11,10 @@ public:
 	{
 		try {
 			std::ifstream fs(filename);
+			ASSERT_TRUE(fs.is_open()) << filename << " wasn't opened";
 
 			double x, y;
-			while (!fs.eof()) {
+			while (fs) {
 				fs >> x >> y;
 				m_set.put(Point(x, y));
 			}
