@@ -90,7 +90,7 @@ TYPED_TEST(PointSetTest, PointSetBasicSearch)
 
 TYPED_TEST(PointSetTest, PointSetNearest0)
 {
-	this->load_data("test/test0.dat");
+	this->load_data("test/etc/test0.dat");
 	auto & p = this->m_set;
 	
 	auto n = p.nearest(Point(.74, .29));
@@ -100,7 +100,7 @@ TYPED_TEST(PointSetTest, PointSetNearest0)
 
 TYPED_TEST(PointSetTest, PointSetNearest1)
 {
-        this->load_data("test/test2.dat");
+        this->load_data("test/etc/test2.dat");
         auto & p = this->m_set;
 
 	auto n = p.nearest(Point(.712, .567));
@@ -110,7 +110,7 @@ TYPED_TEST(PointSetTest, PointSetNearest1)
 
 TYPED_TEST(PointSetTest, PointSetRange0)
 {
-        this->load_data("test/test1.dat");
+        this->load_data("test/etc/test1.dat");
         auto & p = this->m_set;
 
 	auto range = p.range(Rect(Point(0.634, 0.276), Point(.818, .42)));
