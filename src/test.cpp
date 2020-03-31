@@ -124,3 +124,21 @@ TYPED_TEST(PointSetTest, PointSetRange0)
 	++it;
 	ASSERT_TRUE(*it == *range.second); 
 }
+
+TYPED_TEST(PointSetTest, PointSetNearestK1)
+{
+    this->load_data("test/etc/test2.dat");
+    auto & p = this->m_set;
+
+	auto range = p.nearest(Point(.386, .759), 3);
+    auto & it = range.first;
+    auto & last = range.second;
+
+	ASSERT_TRUE(*it == Point(0.376, 0.767));
+	++it;
+	ASSERT_TRUE(*it == Point(0.409, 0.754));
+	++it;
+	ASSERT_TRUE(*it == Point(0.408, 0.728));
+	++it;
+	ASSERT_TRUE(*it == *last); 
+}
