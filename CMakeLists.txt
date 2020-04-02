@@ -12,6 +12,9 @@ include_directories(${ROOT_INCLUDES})
 # Source files
 file(GLOB SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
+# Include the gtest library
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
 # Unit tests
 add_executable(runUnitTests ${SRC_FILES})
 target_compile_options(runUnitTests PRIVATE ${COMPILE_OPTS} -O3 -Wno-gnu-zero-variadic-macro-arguments)
