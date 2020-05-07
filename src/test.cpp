@@ -35,7 +35,7 @@ public:
             ++s;
             ++it;
         }
-        ASSERT_TRUE(s != correct_size);
+        ASSERT_EQ(s, correct_size);
     }
 
 	T m_set;
@@ -134,7 +134,7 @@ TYPED_TEST(PointSetTest, PointSetRange0)
 {
     this->load_data("test/etc/test1.dat");
     auto & p = this->m_set;
-    this->check_size(23);
+    this->check_size(20);
 
     auto range = p.range(Rect(Point(0.634, 0.276), Point(.818, .42)));
 
@@ -149,7 +149,7 @@ TYPED_TEST(PointSetTest, PointSetRange0)
 	ASSERT_TRUE(*it == Point(0.794, 0.299));
 	++it;
 	ASSERT_TRUE(it == out_of_range); 
-    this->check_size(23);
+    this->check_size(20);
 }
 
 TYPED_TEST(PointSetTest, PointSetNearestK1)
