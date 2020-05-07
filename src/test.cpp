@@ -16,6 +16,9 @@ public:
 			double x, y;
 			while (fs) {
 				fs >> x >> y;
+                if (fs.fail()) {
+                    break;
+                }
 				m_set.put(Point(x, y));
 			}
 
