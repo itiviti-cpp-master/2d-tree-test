@@ -93,36 +93,36 @@ TYPED_TEST(PointSetTest, PointSetMethods)
 	ASSERT_TRUE(p.empty());
 	ASSERT_EQ(p.size(), 0);
 
-	p.put(Point(0, 0));
-	p.put(Point(1., 1.));
-	p.put(Point(.5, .5));
+    Point a(0., 0.), b(1., 1.), c(.5, .5);
+	p.put(a);
+	p.put(b);
+	p.put(c);
 	ASSERT_FALSE(p.empty());
 	ASSERT_EQ(p.size(), 3);
     this->check_size(3);
-	ASSERT_TRUE(p.contains(Point(0,0)));
+	ASSERT_TRUE(p.contains(a));
+	ASSERT_TRUE(p.contains(b));
+	ASSERT_TRUE(p.contains(c));
 	ASSERT_FALSE(p.contains(Point(0.5,0)));
-
-    auto it = p.begin();
-	ASSERT_DOUBLE_EQ(it->x(), 0.);
-	ASSERT_DOUBLE_EQ(it->y(), 0.);
 }
 
 TYPED_TEST(PointSetTest, PointSetBasicSearch)
 {
 	auto & p = this->m_set;
-	p.put(Point(0, 0));
-	p.put(Point(1., 1.));
-	p.put(Point(.5, .5));
+    Point a(0., 0.), b(1., 1.), c(.5, .5);
+	p.put(a);
+	p.put(b);
+	p.put(c);
     this->check_size(3);
 	
 	auto n = p.nearest(Point(.4, .4));
 	ASSERT_TRUE(n.has_value());
-	ASSERT_EQ(Point(.5, .5), *n);
+	ASSERT_EQ(c, *n);
 
 	auto range = p.range(Rect(Point(0.3, 0.3), Point(.7, .7)));
     auto s = this->to_set(range);
 	ASSERT_EQ(s.size(), 1);
-    this->contains(s, Point(.5, .5));
+    this->contains(s, c);
 }
 
 TYPED_TEST(PointSetTest, PointSetNearest0)
