@@ -157,6 +157,18 @@ TYPED_TEST(PointSetTest, PointSetNearest1)
     this->check_size(120);
 }
 
+TYPED_TEST(PointSetTest, PointSetNearest1B)
+{
+    this->load_data("test/etc/test2.dat.balanced");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto n = p.nearest(Point(.712, .567));
+    ASSERT_TRUE(n.has_value());
+    ASSERT_EQ(Point(0.718, 0.555), *n);
+    this->check_size(120);
+}
+
 TYPED_TEST(PointSetTest, PointSetRange0)
 {
     this->load_data("test/etc/test1.dat");
@@ -196,9 +208,63 @@ TYPED_TEST(PointSetTest, PointSetRange1)
     this->check_size(120);
 }
 
+TYPED_TEST(PointSetTest, PointSetRange1B)
+{
+    this->load_data("test/etc/test2.dat.balanced");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto range = p.range(Rect(Point(0., 0.), Point(1., 1.)));
+
+    auto s = this->to_set(range);
+    ASSERT_EQ(s.size(), 120);
+    auto it = p.begin();
+    auto end = p.end();
+    while (it != end) {
+        this->contains(s, *it);
+        ++it;
+    }
+
+    range = p.range(Rect(Point(0., 0.), Point(0., 0.)));
+    s = this->to_set(range);
+    ASSERT_EQ(s.size(), 0);
+    this->check_size(120);
+}
+
 TYPED_TEST(PointSetTest, PointSetNearestK1)
 {
     this->load_data("test/etc/test2.dat");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto range = p.nearest(Point(.386, .759), 3);
+    auto s = this->to_set(range);
+    ASSERT_EQ(s.size(), 3);
+    this->contains(s, Point(0.376, 0.767));
+    this->contains(s, Point(0.409, 0.754));
+    this->contains(s, Point(0.408, 0.728));
+
+    range = p.nearest(Point(.386, .759), 0);
+    s = this->to_set(range);
+    ASSERT_EQ(s.size(), 0);
+
+    range = p.nearest(Point(.386, .759), 120);
+    s = this->to_set(range);
+    ASSERT_EQ(s.size(), 120);
+
+    range = p.nearest(Point(.386, .759), 210);
+    s = this->to_set(range);
+    ASSERT_EQ(s.size(), 120);
+    this->contains(s, Point(0.376, 0.767));
+    this->contains(s, Point(0.409, 0.754));
+    this->contains(s, Point(0.408, 0.728));
+
+    this->check_size(120);
+}
+
+TYPED_TEST(PointSetTest, PointSetNearestK1B)
+{
+    this->load_data("test/etc/test2.dat.balanced");
     auto & p = this->m_set;
     this->check_size(120);
 
