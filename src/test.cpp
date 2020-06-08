@@ -116,18 +116,19 @@ TYPED_TEST(PointSetTest, PointSetMethods)
 
 TYPED_TEST(PointSetTest, PointSetBasicSearch)
 {
-    auto & p = this->m_set;
+    auto & ps_write = this->m_set;
     Point a(0., 0.), b(1., 1.), c(.5, .5);
-    p.put(a);
-    p.put(b);
-    p.put(c);
+    ps_write.put(a);
+    ps_write.put(b);
+    ps_write.put(c);
     this->check_size(3);
 
-    auto n = p.nearest(Point(.4, .4));
+    const auto & ps_read = this->m_set;
+    auto n = ps_read.nearest(Point(.4, .4));
     ASSERT_TRUE(n.has_value());
     ASSERT_EQ(c, *n);
 
-    auto range = p.range(Rect(Point(0.3, 0.3), Point(.7, .7)));
+    auto range = ps_read.range(Rect(Point(0.3, 0.3), Point(.7, .7)));
     auto s = this->to_set(range);
     ASSERT_EQ(s.size(), 1);
     this->contains(s, c);
@@ -234,7 +235,7 @@ TYPED_TEST(PointSetTest, PointSetRange1B)
 TYPED_TEST(PointSetTest, PointSetNearestK1)
 {
     this->load_data("test/etc/test2.dat");
-    auto & p = this->m_set;
+    const auto & p = this->m_set;
     this->check_size(120);
 
     auto range = p.nearest(Point(.386, .759), 3);
