@@ -46,7 +46,7 @@ class PointSetTest : public ::testing::Test {
         using iterator_t = typename T::ForwardIt;
         using set_t = std::set<Point>;
 
-        set_t to_set(std::pair<iterator_t, iterator_t> & range)
+        set_t to_set(const std::pair<iterator_t, iterator_t> & range)
         {
             set_t res;
             std::copy(range.first, range.second, std::inserter(res, res.begin()));
@@ -93,6 +93,30 @@ TEST(PointSetTest, Rect)
     ASSERT_TRUE(r.intersects(Rect(Point(0., 0.), Point(1.5, 1.5))));
     ASSERT_TRUE(r.intersects(Rect(Point(0.5, 0.5), Point(3.5, 3.5))));
     ASSERT_FALSE(r.intersects(Rect(Point(2.1, 0.1), Point(3.5, 1.9))));
+}
+
+TYPED_TEST(PointSetTest, ForwardIterator)
+{
+    this->load_data("test/etc/test2.dat");
+    auto & p = this->m_set;
+
+    auto s1 = this->to_set({p.begin(), p.end()});
+    auto s2 = this->to_set({p.begin(), p.end()});
+
+    ASSERT_EQ(s1.size(), 120);
+    ASSERT_EQ(s2.size(), 120);
+
+    ASSERT_TRUE(s1 == s2);
+
+    auto it1 = p.begin(), it2 = p.begin(), end = p.end();
+    while (it1 != end) {
+        ASSERT_DOUBLE_EQ(it1->x(), it2->x());
+        ASSERT_DOUBLE_EQ(it1->y(), it2->y());
+        auto prev_it = it1++;
+        ASSERT_NE(prev_it, it1);
+        ++it2;
+    }
+    ASSERT_EQ(it2, end);
 }
 
 TYPED_TEST(PointSetTest, PointSetMethods)
@@ -292,4 +316,55 @@ TYPED_TEST(PointSetTest, PointSetNearestK1B)
     this->contains(s, Point(0.408, 0.728));
 
     this->check_size(120);
+}
+
+TYPED_TEST(PointSetTest, RangeForwardIterator)
+{
+    this->load_data("test/etc/test2.dat.balanced");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto s1 = this->to_set(p.range(Rect(Point(0., 0.), Point(1., 1.))));
+    auto s2 = this->to_set(p.range(Rect(Point(0., 0.), Point(1., 1.))));
+
+    ASSERT_EQ(s1.size(), 120);
+    ASSERT_EQ(s2.size(), 120);
+    ASSERT_EQ(s1, s2);
+
+    auto [it1, end] = p.range(Rect(Point(0., 0.), Point(1., 1.)));
+    auto it2 {it1};
+
+    while (it1 != end) {
+        ASSERT_DOUBLE_EQ(it1->x(), it2->x());
+        ASSERT_DOUBLE_EQ(it1->y(), it2->y());
+        auto prev_it = it1++;
+        ASSERT_NE(prev_it, it1);
+        ++it2;
+    }
+    ASSERT_EQ(it2, end);
+}
+
+TYPED_TEST(PointSetTest, NearestForwardIterator)
+{
+    this->load_data("test/etc/test2.dat.balanced");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto s1 = this->to_set(p.nearest(Point(.386, .759), 120));
+    auto s2 = this->to_set(p.nearest(Point(.386, .759), 120));
+
+    ASSERT_EQ(s1.size(), 120);
+    ASSERT_EQ(s2.size(), 120);
+    ASSERT_EQ(s1, s2);
+
+    auto [it1, end] = p.nearest(Point(.386, .759), 120);
+    auto it2 {it1};
+
+    while (it1 != end) {
+        ASSERT_DOUBLE_EQ(it1->x(), it2->x());
+        ASSERT_DOUBLE_EQ(it1->y(), it2->y());
+        auto prev_it = it1++;
+        ASSERT_NE(prev_it, it1);
+        ++it2;
+    }
 }
