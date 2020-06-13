@@ -43,10 +43,11 @@ class PointSetTest : public ::testing::Test {
             ASSERT_EQ(s, correct_size);
         }
 
-        using iterator_t = typename T::ForwardIt;
+        // using iterator_t = typename T::ForwardIt;
         using set_t = std::set<Point>;
 
-        set_t to_set(const std::pair<iterator_t, iterator_t> & range)
+        template<typename ITER>
+        set_t to_set(const std::pair<ITER, ITER> & range)
         {
             set_t res;
             std::copy(range.first, range.second, std::inserter(res, res.begin()));
@@ -100,8 +101,8 @@ TYPED_TEST(PointSetTest, ForwardIterator)
     this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
 
-    auto s1 = this->to_set({p.begin(), p.end()});
-    auto s2 = this->to_set({p.begin(), p.end()});
+    auto s1 = this->to_set(std::make_pair(p.begin(), p.end()));
+    auto s2 = this->to_set(std::make_pair(p.begin(), p.end()));
 
     ASSERT_EQ(s1.size(), 120);
     ASSERT_EQ(s2.size(), 120);
