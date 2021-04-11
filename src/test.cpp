@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "primitives.h"
+#include "test_iterator.h"
 
 #include <algorithm>
 #include <iostream>
@@ -43,7 +44,7 @@ class PointSetTest : public ::testing::Test {
             ASSERT_EQ(s, correct_size);
         }
 
-        // using iterator_t = typename T::ForwardIt;
+        using iterator_t = typename T::iterator;
         using set_t = std::set<Point>;
 
         template<typename ITER>
@@ -60,11 +61,26 @@ class PointSetTest : public ::testing::Test {
         }
 
         T m_set;
+
+        T& not_empty_container()
+        {
+            if (m_sample.empty()) {
+                m_sample.put(Point(0.1, 0.1));
+                m_sample.put(Point(0.13, 0.008));
+                m_sample.put(Point(0.11, 0.8));
+                m_sample.put(Point(0.1, 0.34));
+                m_sample.put(Point(0.5, 0.9));
+                m_sample.put(Point(0.8, 0.3));
+            }
+
+            return m_sample;
+        }
+
+        T m_sample;
 };
 
 using TestTypes = ::testing::Types<rbtree::PointSet, kdtree::PointSet>;
 TYPED_TEST_SUITE(PointSetTest, TestTypes);
-
 
 TEST(PointSetTest, Point)
 {
@@ -383,3 +399,27 @@ TYPED_TEST(PointSetTest, NearestForwardIterator)
         ++it2;
     }
 }
+
+TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
+{
+    this->load_data("test/etc/test2.dat.balanced");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    using iterator_t = typename TestFixture::iterator_t;
+
+    std::vector<iterator_test::Job<iterator_t>> jobs;
+    size_t count = 100;
+    double step = 1. / count;
+    for (size_t i = 0; i < count; ++i) {
+        double l = i * step;
+        jobs.emplace_back([&p, &l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
+                            iterator_test::test_multipass<iterator_t>);
+        jobs.emplace_back([&p, &l, &i]() { return p.nearest(Point(l, l), i); }, 
+                            iterator_test::test_multipass<iterator_t>);
+    }
+    iterator_test::run_multithread<iterator_t>(jobs);
+}
+
+using TypesToTest = ::testing::Types<PointSetTest<rbtree::PointSet>, PointSetTest<kdtree::PointSet>>;
+INSTANTIATE_TYPED_TEST_SUITE_P(KDTree, IteratorTest, TypesToTest);
