@@ -204,7 +204,7 @@ TYPED_TEST(PointSetTest, PointSetNearest1)
 
 TYPED_TEST(PointSetTest, PointSetNearest1B)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
@@ -255,7 +255,7 @@ TYPED_TEST(PointSetTest, PointSetRange1)
 
 TYPED_TEST(PointSetTest, PointSetRange1B)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
@@ -309,7 +309,7 @@ TYPED_TEST(PointSetTest, PointSetNearestK1)
 
 TYPED_TEST(PointSetTest, PointSetNearestK1B)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
@@ -340,7 +340,7 @@ TYPED_TEST(PointSetTest, PointSetNearestK1B)
 
 TYPED_TEST(PointSetTest, RangeForwardIterator)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
@@ -371,7 +371,7 @@ TYPED_TEST(PointSetTest, RangeForwardIterator)
 
 TYPED_TEST(PointSetTest, NearestForwardIterator)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
@@ -402,7 +402,7 @@ TYPED_TEST(PointSetTest, NearestForwardIterator)
 
 TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
 {
-    this->load_data("test/etc/test2.dat.balanced");
+    this->load_data("test/etc/test2.dat");
     auto & p = this->m_set;
     this->check_size(120);
 
