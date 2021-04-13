@@ -164,7 +164,7 @@ void random_access(Iterator begin, Iterator end)
     ASSERT_TRUE(r == begin);
 
     auto i = begin;
-    static_assert(std::is_convertible_v<Iterator::reference, decltype(i[n])>);
+    static_assert(std::is_convertible_v<typename Iterator::reference, decltype(i[n])>);
     ASSERT_TRUE(i[n] == *f1);
     ASSERT_TRUE(begin < f1);
     ASSERT_TRUE(begin < end);
