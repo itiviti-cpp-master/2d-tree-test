@@ -216,8 +216,8 @@ void run_multithread(std::vector<Job<Iterator>> jobs)
 {
     std::cout << "Start " << jobs.size() << " threads\n";
     std::vector<std::thread> v;
-    for (auto & j : jobs) {
-        v.emplace_back([&j] ()
+    for (const auto & j : jobs) {
+        v.emplace_back([j] ()
                 { auto [b, e] = j.range(); j.test(b, e); });
     }
 
