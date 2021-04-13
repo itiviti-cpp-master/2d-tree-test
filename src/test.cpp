@@ -413,9 +413,9 @@ TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
     double step = 1. / count;
     for (size_t i = 0; i < count; ++i) {
         double l = i * step;
-        jobs.emplace_back([&p, &l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
+        jobs.emplace_back([p, l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
                             iterator_test::test_multipass<iterator_t>);
-        jobs.emplace_back([&p, &l, &i]() { return p.nearest(Point(l, l), i); }, 
+        jobs.emplace_back([p, l, i]() { return p.nearest(Point(l, l), i); }, 
                             iterator_test::test_multipass<iterator_t>);
     }
     iterator_test::run_multithread<iterator_t>(jobs);
