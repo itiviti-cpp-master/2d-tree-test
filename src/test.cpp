@@ -415,6 +415,25 @@ TYPED_TEST(PointSetTest, NearestForwardIterator)
     }
 }
 
+TYPED_TEST(PointSetTest, NearestPointSetCopy)
+{
+    this->load_data("test/etc/test2.dat");
+    auto & p = this->m_set;
+    this->check_size(120);
+
+    auto copy_p {p};
+
+    auto range = p.nearest(Point(.386, .759), 120);
+    auto range_copy = copy_p.nearest(Point(.386, .759), 120);
+
+    auto s = this->to_set(range);
+    auto s_copy = this->to_set(range_copy);
+
+    ASSERT_EQ(s.size(), 120);
+    ASSERT_EQ(s_copy.size(), 120);
+    ASSERT_EQ(s, s_copy);
+}
+
 TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
 {
     this->load_data("test/etc/test2.dat");
@@ -428,9 +447,9 @@ TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
     double step = 1. / count;
     for (size_t i = 0; i < count; ++i) {
         double l = i * step;
-        jobs.emplace_back([p, l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
+        jobs.emplace_back([&p, l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
                             iterator_test::test_multipass<iterator_t>);
-        jobs.emplace_back([p, l, i]() { return p.nearest(Point(l, l), i); }, 
+        jobs.emplace_back([&p, l, i]() { return p.nearest(Point(l, l), i); }, 
                             iterator_test::test_multipass<iterator_t>);
     }
     iterator_test::run_multithread<iterator_t>(jobs);
@@ -448,9 +467,9 @@ TYPED_TEST(PointSetTest, MultiThreadIteratorAccessLoadFromFile)
     double step = 1. / count;
     for (size_t i = 0; i < count; ++i) {
         double l = i * step;
-        jobs.emplace_back([p, l, i]() { return p.nearest(Point(l, l), i); }, 
+        jobs.emplace_back([&p, l, i]() { return p.nearest(Point(l, l), i); }, 
                             iterator_test::test_multipass<iterator_t>);
-        jobs.emplace_back([p, l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
+        jobs.emplace_back([&p, l]() { return p.range(Rect(Point(0., 0.), Point(l, l))); }, 
                             iterator_test::test_multipass<iterator_t>);
     }
     iterator_test::run_multithread<iterator_t>(jobs);
