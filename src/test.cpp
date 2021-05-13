@@ -421,7 +421,7 @@ TYPED_TEST(PointSetTest, NearestPointSetCopy)
     auto & p = this->m_set;
     this->check_size(120);
 
-    auto copy_p {p};
+    auto copy_p {p}; // NOLINT: point set copy is required indeed
 
     auto range = p.nearest(Point(.386, .759), 120);
     auto range_copy = copy_p.nearest(Point(.386, .759), 120);
