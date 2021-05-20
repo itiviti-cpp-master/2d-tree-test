@@ -212,13 +212,21 @@ struct Job
 };
 
 template<typename Iterator>
-void run_multithread(std::vector<Job<Iterator>> jobs)
+void run_multithread(std::vector<Job<Iterator>> jobs, std::size_t load_factor = 1234)
 {
     std::cout << "Start " << jobs.size() << " threads\n";
     std::vector<std::thread> v;
     for (const auto & j : jobs) {
-        v.emplace_back([j] ()
-                { auto [b, e] = j.range(); j.test(b, e); });
+        v.emplace_back([load_factor, &j] ()
+                {
+                    std::vector<std::pair<Iterator, Iterator>> results;
+                    for (std::size_t i = 0; i < load_factor; ++i ) {
+                        results.emplace_back(j.range());
+                    }
+                    for (const auto & [b, e] : results) {
+                        j.test(b, e);
+                    }
+                 });
     }
 
     for (auto & t : v) {

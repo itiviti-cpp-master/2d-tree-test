@@ -443,7 +443,7 @@ TYPED_TEST(PointSetTest, MultiThreadIteratorAccess)
     using iterator_t = typename TestFixture::iterator_t;
 
     std::vector<iterator_test::Job<iterator_t>> jobs;
-    size_t count = 10;
+    size_t count = 100;
     double step = 1. / count;
     for (size_t i = 0; i < count; ++i) {
         double l = i * step;
